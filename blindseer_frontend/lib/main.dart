@@ -1,108 +1,174 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_azure_tts/flutter_azure_tts.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+/*
+const List<String> voices = <String>[
+  'Jenny',
+  'Guy',
+  'Aria',
+  'Davis',
+  'Amber',
+  'Andrew',
+  'Brian'
+];
+*/
 
 void main() {
+  /*
+  AzureTts.init(
+      subscriptionKey: "YOUR SUBSCRIPTION KEY",
+      region: "YOUR REGION",
+      withLogs: true); // enable logs
+  */
+  //getVoices();
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+/*
+void getVoices() async {
+  // Get available voices
+  final voicesResponse = await AzureTts.getAvailableVoices();
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Blindseer',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Blindseer Alpha Landing Page'),
-    );
-  }
+  //Pick a Neural voice
+  final voice = voicesResponse.voices
+      .where((element) => element.locale.startsWith("en-"))
+      .toList(growable: false).first;
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+void readText(){
 
-  final String title;
+}
+*/
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  FlutterTts flutterTts = FlutterTts(); // References FlutterTts
+class _MyAppState extends State<MyApp> {
+  double speakingSpeed = 50;
+  String voice = 'Aria';
 
-  void _increment() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  void _speak() async {
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1); // 0.5 to 1.5 (deepness of voice)
-    await flutterTts.speak("Hello this function works");
+  void dropDownCallBack(String? selectedValue) {
+    if (selectedValue is String) {
+      setState(() {
+        voice = selectedValue;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called : rerunning build methods
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return MaterialApp(
+      theme: ThemeData(scaffoldBackgroundColor: Colors.black),
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: const Text(
+            'Blindseer Demo',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 50,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
+
+        body: Column(
+          children: [
+            SizedBox(
+              height: 150,
+              child: Stack(children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(25),
+                  child: const Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Talking Speed',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  alignment: Alignment.bottomCenter,
+                  child: SliderTheme(
+                    data: const SliderThemeData(
+                      thumbColor: Colors.white,
+                      trackHeight: 10,
+                    ),
+                    child: Slider(
+                      value: speakingSpeed,
+                      max: 100,
+                      divisions: 10,
+                      label: speakingSpeed.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          speakingSpeed = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ]),
             ),
-            TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              ),
-              onPressed: _speak,
-              child: Text('Speak'),
-            ),
+            SizedBox(
+              height: 150,
+              child: Stack(children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(25),
+                  child: const Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Voice',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: DropdownButton(
+                    items: const [
+                      DropdownMenuItem(value: "Aria", child: Text("Aria")),
+                      DropdownMenuItem(value: "Test", child: Text("Test")),
+                    ],
+                    value: voice,
+                    onChanged: dropDownCallBack,
+                  ),
+                ),
+              ]),
+            ), //container or expanded
           ],
         ),
+
+        // For testing the speaking functionality
+        floatingActionButton: FloatingActionButton(
+          child: const Text('Speak'),
+          onPressed: () {},
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _increment,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
