@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.blindseer_frontend"
+    namespace "com.trivialsolutions.blindseer"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -65,4 +65,7 @@ flutter {
     source '../..'
 }
 
-dependencies{}
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-firestore")
+}

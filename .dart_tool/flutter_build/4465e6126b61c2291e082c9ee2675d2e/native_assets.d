@@ -1,0 +1,1 @@
+ C:\\Users\\verit\\OneDrive\\Faizaan\ Files\\Academic\\University\\1st\ Year\\SE101\\blindseer-frontend\\.dart_tool\\flutter_build\\4465e6126b61c2291e082c9ee2675d2e\\native_assets.yaml: 
