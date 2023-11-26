@@ -5,11 +5,9 @@ import './textlist.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print("Waiting for Firebase App...");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("Firebase App Done!");
   runApp(BlindseerApp());
 }
 
@@ -19,6 +17,7 @@ class BlindseerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Blindseer',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
