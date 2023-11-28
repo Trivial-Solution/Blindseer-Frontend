@@ -178,3 +178,8 @@ cython_debug/
 .idea/workspace.xml
 blindseer-cfefc-firebase-adminsdk-h2tky-d80b878c18.json
 /assets/skilled-mission-405818-0b879b4080fd.json
+
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/package_config_subset
+.dart_tool/package_config.json
