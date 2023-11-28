@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,6 @@ class TTS {
     String jsonString = await rootBundle.loadString('skilled-mission-405818-0b879b4080fd.json');
     Map<String, dynamic> jsonData = json.decode(jsonString);
     credentials = ServiceAccountCredentials.fromJson(jsonData);
-
 
     accessCredentials = await obtainAccessCredentialsViaServiceAccount(
         credentials, ['https://www.googleapis.com/auth/cloud-platform'],
@@ -51,12 +51,10 @@ class TTS {
       'audioConfig': {'audioEncoding': 'MP3'},
     };
 
-
     var headers = {
       'Authorization': 'Bearer $accessToken', // Use accessToken directly
       'Content-Type': 'application/json',
     };
-
 
     var response = await http.post(url, headers: headers, body: json.encode(request));
 
@@ -66,7 +64,9 @@ class TTS {
 
       await playBase64EncodedAudio(audioContent); // Play audio from base64 data
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      if (kDebugMode) {
+        print('Request failed with status: ${response.statusCode}.');
+      }
     }
   }
 }

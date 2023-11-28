@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import './textlist.dart';
-import 'tts.dart';
+import 'services/tts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BlindseerApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class BlindseerApp extends StatefulWidget {
+  const BlindseerApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<BlindseerApp> createState() => _BlindseerAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _BlindseerAppState extends State<BlindseerApp> {
   double speakingSpeed = 50;
   String voice = 'Aria';
 
@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
         floatingActionButton: FloatingActionButton(
           child: const Text('Speak'),
           onPressed:() async {
-            await tts.performTextToSpeech("Text here");
+            await tts.performTextToSpeech("Go win at league");
           },
         ),
       ),
