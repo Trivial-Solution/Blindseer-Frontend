@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'services/firebase_options.dart';
 import './textlist.dart';
 import 'services/tts.dart';
 
-void main() {
-  runApp(const BlindseerApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  print("Waiting for Firebase App...");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  print("Firebase App Done!");
+  runApp(BlindseerApp());
 }
 
 class BlindseerApp extends StatefulWidget {
@@ -129,13 +135,14 @@ class _BlindseerAppState extends State<BlindseerApp> {
                 ),
               ]),
             ), //container or expanded
+            TextListPage()
           ],
         ),
 
         // For testing the speaking functionality
         floatingActionButton: FloatingActionButton(
           child: const Text('Speak'),
-          onPressed:() async {
+          onPressed: () async {
             await tts.performTextToSpeech("Go win at league");
           },
         ),
@@ -143,7 +150,3 @@ class _BlindseerAppState extends State<BlindseerApp> {
     );
   }
 }
-
-
-
-
