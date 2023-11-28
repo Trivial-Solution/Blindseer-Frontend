@@ -36,7 +36,9 @@ class TTS {
           AudioSource.uri(Uri.dataFromBytes(bytes, mimeType: 'audio/mpeg')));
       player.play(); // Play the audio
     } catch (e) {
-      print("Error playing audio: $e");
+      if (kDebugMode) {
+        print("Error playing audio: $e");
+      }
     }
   }
 
