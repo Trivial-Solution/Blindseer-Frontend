@@ -135,7 +135,12 @@ class _BlindseerAppState extends State<BlindseerApp> {
                 ),
               ]),
             ), //container or expanded
-            TextListPage()
+            SizedBox(
+              height: 300,
+              child: Card(
+                child: TextListPage(),
+              ),
+            ),
           ],
         ),
 

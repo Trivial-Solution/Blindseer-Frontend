@@ -10,14 +10,7 @@ class TextListPage extends StatefulWidget {
 }
 
 class _TextListPageState extends State<TextListPage> {
-  int _counter = 0;
   FlutterTts flutterTts = FlutterTts(); // References FlutterTts
-
-  void _increment() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   void _speak() async {
     await flutterTts.setLanguage("en-US");
