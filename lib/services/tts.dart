@@ -1,27 +1,32 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:just_audio/just_audio.dart';
 
 class TTS {
   late final ServiceAccountCredentials credentials;
   late final AccessCredentials accessCredentials;
   late String accessToken;
-  final Uri url = Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
+  final Uri url =
+      Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
 
   TTS() {
     apiInit(); // Ensures initialization
   }
 
   Future<void> apiInit() async {
-    String jsonString = await rootBundle.loadString('skilled-mission-405818-0b879b4080fd.json');
+    String jsonString = await rootBundle
+        .loadString('assets/skilled-mission-405818-0b879b4080fd.json');
+
     Map<String, dynamic> jsonData = json.decode(jsonString);
     credentials = ServiceAccountCredentials.fromJson(jsonData);
 
     accessCredentials = await obtainAccessCredentialsViaServiceAccount(
-        credentials, ['https://www.googleapis.com/auth/cloud-platform'],
+        credentials,
+        ['https://www.googleapis.com/auth/cloud-platform'],
         http.Client());
 
     accessToken = accessCredentials.accessToken.data;
@@ -56,7 +61,8 @@ class TTS {
       'Content-Type': 'application/json',
     };
 
-    var response = await http.post(url, headers: headers, body: json.encode(request));
+    var response =
+        await http.post(url, headers: headers, body: json.encode(request));
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
@@ -70,4 +76,3 @@ class TTS {
     }
   }
 }
-
