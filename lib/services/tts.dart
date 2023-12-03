@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:googleapis_auth/auth_io.dart';
@@ -11,43 +12,61 @@ class TTS {
   late final AccessCredentials accessCredentials;
   late String accessToken;
   final Uri url =
-      Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
+  Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
+  final AudioPlayer player = AudioPlayer(); // Audio player instance
+
+  bool isSpeaking = false; // Flag to check if currently speaking
+  Queue<String> textQueue = Queue<String>(); // Queue for texts
 
   TTS() {
     apiInit(); // Ensures initialization
   }
 
   Future<void> apiInit() async {
-    String jsonString = await rootBundle
-        .loadString('assets/skilled-mission-405818-0b879b4080fd.json');
+    String jsonString = await rootBundle.loadString('assets/skilled-mission-405818-0b879b4080fd.json');
 
     Map<String, dynamic> jsonData = json.decode(jsonString);
     credentials = ServiceAccountCredentials.fromJson(jsonData);
 
-    accessCredentials = await obtainAccessCredentialsViaServiceAccount(
-        credentials,
-        ['https://www.googleapis.com/auth/cloud-platform'],
-        http.Client());
+    accessCredentials = await obtainAccessCredentialsViaServiceAccount(credentials,
+        ['https://www.googleapis.com/auth/cloud-platform'], http.Client());
 
     accessToken = accessCredentials.accessToken.data;
   }
 
   Future<void> playBase64EncodedAudio(String base64Audio) async {
     Uint8List bytes = base64.decode(base64Audio);
-    AudioPlayer player = AudioPlayer();
 
     try {
       await player.setAudioSource(
           AudioSource.uri(Uri.dataFromBytes(bytes, mimeType: 'audio/mpeg')));
-      player.play(); // Play the audio
+      await player.play(); // Play the audio
+      isSpeaking = true;
+      player.playerStateStream.listen((state) {
+        if (state.processingState == ProcessingState.completed) {
+          isSpeaking = false; // Update flag when audio playback is completed
+          if (textQueue.isNotEmpty) {
+            performTextToSpeech(textQueue.removeFirst()); // Speak next text
+          }
+        }
+      });
     } catch (e) {
       if (kDebugMode) {
         print("Error playing audio: $e");
       }
+      isSpeaking = false; // Ensure flag is reset on error
+      if (textQueue.isNotEmpty) {
+        performTextToSpeech(textQueue.removeFirst()); // Speak next text
+      }
     }
   }
 
-  Future<void> performTextToSpeech(var text) async {
+  Future<void> performTextToSpeech(String text) async {
+    if (isSpeaking) {
+      textQueue.add(text); // Add text to queue if TTS is currently speaking
+      return;
+    }
+
     var request = {
       'input': {'text': text},
       'voice': {
@@ -63,17 +82,19 @@ class TTS {
       'Content-Type': 'application/json',
     };
 
-    var response =
-        await http.post(url, headers: headers, body: json.encode(request));
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: json.encode(request),
+    );
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
       var audioContent = jsonResponse['audioContent'];
-
-      await playBase64EncodedAudio(audioContent); // Play audio from base64 data
+      await playBase64EncodedAudio(audioContent);
     } else {
       if (kDebugMode) {
-        print('Request failed with status: ${response.statusCode}.');
+        print('Error with Text-to-Speech API: ${response.statusCode}');
       }
     }
   }
