@@ -32,13 +32,17 @@ class _TextListPageState extends State<TextListPage> {
         }
 
         return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
-            return ListTile(
-              title: Text(data['descr']),
-            );
-          }).toList(),
+          children: snapshot.data!.docs
+              .map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(data['descr']),
+                );
+              })
+              .toList()
+              .reversed
+              .toList(),
         );
       },
     );
