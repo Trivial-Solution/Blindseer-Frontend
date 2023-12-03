@@ -62,8 +62,16 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  fonts:
+    - family: PlayfairDisplay
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-Regular.ttf
+    - family: EagleLake
+      fonts:
+        - asset: assets/fonts/EagleLake-Regular.ttf
   assets:
     - assets/skilled-mission-405818-0b879b4080fd.json
+    - assets/images/black-and-white-polka-dot-pattern-background-free-vector.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

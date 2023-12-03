@@ -29,44 +29,53 @@ class BlindseerApp extends StatefulWidget {
 
 class _BlindseerAppState extends State<BlindseerApp> {
   // Create a TTS object
-  final TTS tts = TTS();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.black),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: const Text(
-            'Blindseer Demo',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 50,
+          title: Center(
+            child: const Text(
+              '╔═══ Blindseer ═══╗',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "EagleLake",
+                fontWeight: FontWeight.bold,
+                fontSize: 48,
+              ),
             ),
           ),
         ),
 
-        body: const Column(
-          children: [
-            Boxes(),
-            SizedBox(
-              height: 300,
-              child: Card(
-                child: TextListPage(),
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  "assets/images/black-and-white-polka-dot-pattern-background-free-vector.jpg"),
+              fit: BoxFit.cover,
             ),
-          ],
+          ),
+          child: const Column(
+            children: [
+              SizedBox(
+                height: 600,
+                child: Card(
+                  color: Colors.black45,
+                  child: TextListPage(),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Boxes(),
+            ],
+          ),
         ),
 
-        // For testing the speaking functionality
-        floatingActionButton: FloatingActionButton(
-          child: const Text('Speak'),
-          onPressed: () async {
-            await tts.performTextToSpeech("Go win at league");
-          },
-        ),
       ),
     );
   }

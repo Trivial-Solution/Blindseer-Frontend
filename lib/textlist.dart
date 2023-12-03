@@ -17,7 +17,10 @@ class _TextListPageState extends State<TextListPage> {
   void initState() {
     super.initState();
     // Listen to Firestore stream
-    FirebaseFirestore.instance.collection('texts').snapshots().listen((snapshot) {
+    FirebaseFirestore.instance
+        .collection('texts')
+        .snapshots()
+        .listen((snapshot) {
       // Get the latest text
       var latestText = snapshot.docs.last.data()['descr'];
       // Check if the latest text is different from the last spoken text
@@ -50,8 +53,32 @@ class _TextListPageState extends State<TextListPage> {
               .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                return ListTile(
-                  title: Text(data['descr']),
+                return Column(
+                  children: [
+                    Divider(
+                      height: 20,
+                      thickness: 2,
+                      color: Color.fromARGB(255, 64, 20, 139),
+                    ),
+                    ListTile(
+                      leading: Text(
+                        document.reference.id.substring(0, 10) +
+                            "\n" +
+                            document.reference.id
+                                .substring(11, 16)
+                                .replaceAll("-", ":"),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                        ),
+                      ),
+                      title: Text(
+                        data['descr'],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 );
               })
               .toList()
