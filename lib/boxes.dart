@@ -29,7 +29,7 @@ class _BoxesState extends State<Boxes> {
           height: 100,
           child: Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 64, 20, 139),
+              color: Color.fromARGB(255, 18, 81, 163),
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Column(children: [
@@ -76,7 +76,7 @@ class _BoxesState extends State<Boxes> {
               width: 220,
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 64, 20, 139),
+                  color: Color.fromARGB(255, 18, 81, 163),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 padding: const EdgeInsets.all(10),
@@ -123,7 +123,7 @@ class _BoxesState extends State<Boxes> {
               height: 60,
               width: 100,
               child: FloatingActionButton(
-                backgroundColor: Color.fromARGB(255, 64, 20, 139),
+                backgroundColor: Color.fromARGB(255, 18, 81, 163),
                 child: const Text(
                   'Speak',
                   style: TextStyle(

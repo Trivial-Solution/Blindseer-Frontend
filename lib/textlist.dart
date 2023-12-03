@@ -58,7 +58,7 @@ class _TextListPageState extends State<TextListPage> {
                     Divider(
                       height: 20,
                       thickness: 2,
-                      color: Color.fromARGB(255, 64, 20, 139),
+                      color: Color.fromARGB(255, 18, 81, 163),
                     ),
                     ListTile(
                       leading: Text(

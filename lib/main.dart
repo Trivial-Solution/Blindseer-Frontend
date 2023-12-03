@@ -50,13 +50,15 @@ class _BlindseerAppState extends State<BlindseerApp> {
             ),
           ),
         ),
-
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  "assets/images/black-and-white-polka-dot-pattern-background-free-vector.jpg"),
-              fit: BoxFit.cover,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black,
+                Color.fromARGB(255, 18, 81, 163),
+              ],
             ),
           ),
           child: const Column(
@@ -75,7 +77,6 @@ class _BlindseerAppState extends State<BlindseerApp> {
             ],
           ),
         ),
-
       ),
     );
   }
