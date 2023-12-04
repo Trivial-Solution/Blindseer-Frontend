@@ -28,6 +28,22 @@ class BlindseerApp extends StatefulWidget {
 }
 
 class _BlindseerAppState extends State<BlindseerApp> {
+  final TTS tts = TTS(); // Create an instance of TTS
+
+  Future<void> initializeTTS() async {
+    try {
+      await tts.initialize();
+      print("Initialized tts!");
+    } catch (e) {
+      // Handle TTS initialization error
+    } // Wait for TTS to initialize before using it
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeTTS();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,19 +76,19 @@ class _BlindseerAppState extends State<BlindseerApp> {
               ],
             ),
           ),
-          child: const Column(
+          child: Column(
             children: [
               SizedBox(
                 height: 600,
                 child: Card(
                   color: Colors.black45,
-                  child: TextListPage(),
+                  child: TextListPage(tts: tts),
                 ),
               ),
               SizedBox(
                 height: 50,
               ),
-              Boxes(),
+              Boxes(tts: tts),
             ],
           ),
         ),

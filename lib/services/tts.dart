@@ -10,6 +10,8 @@ import 'package:just_audio/just_audio.dart';
 class TTS {
   late final ServiceAccountCredentials credentials;
   late final AccessCredentials accessCredentials;
+  String voice = "en-GB-Studio-B";
+  double speakingRate = 1.0;
   late String accessToken;
   final Uri url =
       Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
@@ -19,6 +21,12 @@ class TTS {
   Queue<String> textQueue = Queue<String>(); // Queue for texts
 
   TTS();
+
+  void setSettings(String voice, double speakingRate) {
+    this.voice = voice;
+    this.speakingRate = speakingRate;
+    print("Voice updated to ${this.voice} with ${this.speakingRate}");
+  }
 
   Future<void> apiInit() async {
     String jsonString = await rootBundle
@@ -72,10 +80,13 @@ class TTS {
       'input': {'text': text},
       'voice': {
         'languageCode': 'en-GB',
-        'ssmlGender': 'MALE',
-        'name': 'en-GB-Studio-B'
+        'ssmlGender': (voice == "en-GB-Studio-B" ? 'MALE' : 'FEMALE'),
+        'name': voice
       },
-      'audioConfig': {'audioEncoding': 'MP3'},
+      'audioConfig': {
+        'audioEncoding': 'MP3',
+        'speakingRate': speakingRate,
+      },
     };
 
     var headers = {

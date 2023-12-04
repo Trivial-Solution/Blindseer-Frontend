@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'services/tts.dart';
 
 class Boxes extends StatefulWidget {
-  const Boxes({super.key});
+  TTS tts;
+  Boxes({super.key, required this.tts});
 
   @override
   State<Boxes> createState() => _BoxesState();
@@ -10,33 +11,20 @@ class Boxes extends StatefulWidget {
 
 class _BoxesState extends State<Boxes> {
   double speakingSpeed = 50;
-  String voice = 'Aria';
-  final TTS tts = TTS();
-  bool _isTTSInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeTTS(); // Initialize TTS
-  }
-
-  Future<void> initializeTTS() async {
-    try {
-      await tts.initialize();
-      setState(() {
-        _isTTSInitialized = true;
-      });
-    } catch (e) {
-      // Handle TTS initialization error
-    } // Wait for TTS to initialize before using it
-  }
+  String voice = "en-GB-Studio-B";
+  double speakingRate = 1.0;
 
   void dropDownCallBack(String? selectedValue) {
     if (selectedValue is String) {
       setState(() {
         voice = selectedValue;
       });
+      updateTTS();
     }
+  }
+
+  void updateTTS() {
+    widget.tts.setSettings(voice, speakingRate);
   }
 
   @override
@@ -46,12 +34,12 @@ class _BoxesState extends State<Boxes> {
         SizedBox(
           height: 100,
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Color.fromARGB(255, 18, 81, 163),
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Column(children: [
-              const Align(
+              Align(
                 alignment: Alignment.topCenter,
                 child: Text(
                   'Talking Speed',
@@ -64,10 +52,10 @@ class _BoxesState extends State<Boxes> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.all(5),
+                margin: EdgeInsets.all(5),
                 alignment: Alignment.bottomCenter,
                 child: SliderTheme(
-                  data: const SliderThemeData(
+                  data: SliderThemeData(
                     trackHeight: 10,
                   ),
                   child: Slider(
@@ -77,8 +65,9 @@ class _BoxesState extends State<Boxes> {
                     label: speakingSpeed.round().toString(),
                     onChanged: (double value) {
                       setState(() {
-                        speakingSpeed = value;
+                        speakingRate = value / 100 + 0.5;
                       });
+                      updateTTS();
                     },
                   ),
                 ),
@@ -93,16 +82,16 @@ class _BoxesState extends State<Boxes> {
               height: 110,
               width: 220,
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Color.fromARGB(255, 18, 81, 163),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.all(25),
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.all(25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Align(
+                    Align(
                       alignment: Alignment.topCenter,
                       child: Text(
                         'Voice',
@@ -116,17 +105,17 @@ class _BoxesState extends State<Boxes> {
                     ),
                     DropdownButton(
                       dropdownColor: Colors.black,
-                      items: const [
+                      items: [
                         DropdownMenuItem(
-                            value: "Aria",
+                            value: "en-GB-Studio-B",
                             child: Text(
-                              "ARIA",
+                              "PAUL",
                               style: TextStyle(color: Colors.white),
                             )),
                         DropdownMenuItem(
-                            value: "Test",
+                            value: "en-GB-Neural2-C",
                             child: Text(
-                              "BEN",
+                              "DAISY",
                               style: TextStyle(color: Colors.white),
                             )),
                       ],
@@ -142,7 +131,7 @@ class _BoxesState extends State<Boxes> {
               width: 100,
               child: FloatingActionButton(
                 backgroundColor: Color.fromARGB(255, 18, 81, 163),
-                child: const Text(
+                child: Text(
                   'Speak',
                   style: TextStyle(
                     color: Colors.white,
@@ -152,9 +141,11 @@ class _BoxesState extends State<Boxes> {
                   ),
                 ),
                 onPressed: () async {
-                  await tts.performTextToSpeech(
+                  await widget.tts.performTextToSpeech(
                     "Hello there, my name is " +
-                        (voice == "Test" ? "Ben" : voice) +
+                        (voice == "Test"
+                            ? "Daisy"
+                            : (voice == "en-GB-Studio-B" ? "Paul" : voice)) +
                         " and I am your virtual assistant.",
                   );
                 },

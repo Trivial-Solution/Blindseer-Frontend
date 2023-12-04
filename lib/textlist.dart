@@ -3,32 +3,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'services/tts.dart'; // Import the TTS class
 
 class TextListPage extends StatefulWidget {
-  const TextListPage({super.key});
+  TTS tts;
+  TextListPage({super.key, required this.tts});
 
   @override
   State<TextListPage> createState() => _TextListPageState();
 }
 
 class _TextListPageState extends State<TextListPage> {
-  final TTS tts = TTS(); // Create an instance of TTS
   String lastSpokenText = ''; // To keep track of the last spoken text
-  bool _isTTSInitialized = false;
-
-  Future<void> initializeTTS() async {
-    try {
-      await tts.initialize();
-      setState(() {
-        _isTTSInitialized = true;
-      });
-    } catch (e) {
-      // Handle TTS initialization error
-    } // Wait for TTS to initialize before using it
-  }
 
   @override
   void initState() {
     super.initState();
-    initializeTTS();
     // Listen to Firestore stream
     FirebaseFirestore.instance
         .collection('texts')
@@ -45,7 +32,7 @@ class _TextListPageState extends State<TextListPage> {
   }
 
   void _speak(String text) async {
-    await tts.performTextToSpeech(text); // Use the performTextToSpeech method
+    await widget.tts.performTextToSpeech(text); // Use the performTextToSpeech method
   }
 
   @override
