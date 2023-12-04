@@ -12,6 +12,24 @@ class _BoxesState extends State<Boxes> {
   double speakingSpeed = 50;
   String voice = 'Aria';
   final TTS tts = TTS();
+  bool _isTTSInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeTTS(); // Initialize TTS
+  }
+
+  Future<void> initializeTTS() async {
+    try {
+      await tts.initialize();
+      setState(() {
+        _isTTSInitialized = true;
+      });
+    } catch (e) {
+      // Handle TTS initialization error
+    } // Wait for TTS to initialize before using it
+  }
 
   void dropDownCallBack(String? selectedValue) {
     if (selectedValue is String) {
@@ -134,9 +152,11 @@ class _BoxesState extends State<Boxes> {
                   ),
                 ),
                 onPressed: () async {
-                  await tts.performTextToSpeech("Hello there, my name is " +
-                      (voice == "Test" ? "Ben" : voice) +
-                      " and I am your virtual assistant.");
+                  await tts.performTextToSpeech(
+                    "Hello there, my name is " +
+                        (voice == "Test" ? "Ben" : voice) +
+                        " and I am your virtual assistant.",
+                  );
                 },
               ),
             ),

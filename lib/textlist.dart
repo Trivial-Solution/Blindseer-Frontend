@@ -12,10 +12,23 @@ class TextListPage extends StatefulWidget {
 class _TextListPageState extends State<TextListPage> {
   final TTS tts = TTS(); // Create an instance of TTS
   String lastSpokenText = ''; // To keep track of the last spoken text
+  bool _isTTSInitialized = false;
+
+  Future<void> initializeTTS() async {
+    try {
+      await tts.initialize();
+      setState(() {
+        _isTTSInitialized = true;
+      });
+    } catch (e) {
+      // Handle TTS initialization error
+    } // Wait for TTS to initialize before using it
+  }
 
   @override
   void initState() {
     super.initState();
+    initializeTTS();
     // Listen to Firestore stream
     FirebaseFirestore.instance
         .collection('texts')

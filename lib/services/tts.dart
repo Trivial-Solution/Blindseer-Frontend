@@ -12,24 +12,25 @@ class TTS {
   late final AccessCredentials accessCredentials;
   late String accessToken;
   final Uri url =
-  Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
+      Uri.parse('https://texttospeech.googleapis.com/v1/text:synthesize');
   final AudioPlayer player = AudioPlayer(); // Audio player instance
 
   bool isSpeaking = false; // Flag to check if currently speaking
   Queue<String> textQueue = Queue<String>(); // Queue for texts
 
-  TTS() {
-    apiInit(); // Ensures initialization
-  }
+  TTS();
 
   Future<void> apiInit() async {
-    String jsonString = await rootBundle.loadString('assets/skilled-mission-405818-0b879b4080fd.json');
+    String jsonString = await rootBundle
+        .loadString('assets/skilled-mission-405818-0b879b4080fd.json');
 
     Map<String, dynamic> jsonData = json.decode(jsonString);
     credentials = ServiceAccountCredentials.fromJson(jsonData);
 
-    accessCredentials = await obtainAccessCredentialsViaServiceAccount(credentials,
-        ['https://www.googleapis.com/auth/cloud-platform'], http.Client());
+    accessCredentials = await obtainAccessCredentialsViaServiceAccount(
+        credentials,
+        ['https://www.googleapis.com/auth/cloud-platform'],
+        http.Client());
 
     accessToken = accessCredentials.accessToken.data;
   }
@@ -96,6 +97,16 @@ class TTS {
       if (kDebugMode) {
         print('Error with Text-to-Speech API: ${response.statusCode}');
       }
+    }
+  }
+
+  Future<void> initialize() async {
+    await apiInit();
+    if (accessCredentials.accessToken.data != null) {
+      accessToken = accessCredentials.accessToken.data;
+    } else {
+      // Handle the case where the accessToken couldn't be obtained
+      throw Exception('Failed to initialize TTS service.');
     }
   }
 }

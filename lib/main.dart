@@ -28,7 +28,6 @@ class BlindseerApp extends StatefulWidget {
 }
 
 class _BlindseerAppState extends State<BlindseerApp> {
-  // Create a TTS object
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class _BlindseerAppState extends State<BlindseerApp> {
               end: Alignment.bottomCenter,
               colors: [
                 Colors.black,
-                Color.fromARGB(255, 18, 81, 163),
+                Color.fromARGB(255, 0, 42, 98),
               ],
             ),
           ),
