@@ -143,7 +143,7 @@ class _BoxesState extends State<Boxes> {
                 onPressed: () async {
                   await widget.tts.performTextToSpeech(
                     "Hello there, my name is " +
-                        (voice == "Test"
+                        (voice == "en-GB-Neural2-C"
                             ? "Daisy"
                             : (voice == "en-GB-Studio-B" ? "Paul" : voice)) +
                         " and I am your virtual assistant.",
