@@ -1,7 +1,7 @@
 # Blindseer-Frontend
 
 This project makes use of several different technologies to accomplish the goal <br />
-of pulling text and playing it with TTS on an app. The most important dependencies <br />
+of pulling important data about the surroundings on command and playing it using TTS with various tweakable settings on an Android companion app. The most important dependencies for this app <br />
 are:
 
 Major Dependencies: <br />
@@ -10,3 +10,7 @@ Major Dependencies: <br />
 - cloud_firestore 4.13.2 <br />
 - just_audio: 0.9.15 <br />
 - googleapis_auth: 1.4.1 <br />
+
+## Home Page Screenshot
+
+![image](https://github.com/Trivial-Solution/Blindseer-Frontend/assets/57153315/3aa0d645-8816-4f9e-ac84-21bacc460223)
