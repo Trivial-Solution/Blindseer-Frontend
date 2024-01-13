@@ -1,8 +1,6 @@
 # Blindseer-Frontend
 
-This project makes use of several different technologies to accomplish the goal <br />
-of pulling important data about the surroundings on command and playing it using TTS with various tweakable settings on an Android companion app. The most important dependencies for this app <br />
-are:
+This project makes use of several different technologies to accomplish the goal of pulling important data about the surroundings on command and playing it using TTS with various tweakable settings on an Android companion app. The most important dependencies for this app are:
 
 Major Dependencies: <br />
 - Flutter 3.13.9 <br />
